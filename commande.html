@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Commander – KAZA STUDIO</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body{background:#e8e8e8;min-height:100vh}
+    .cmd-wrapper{max-width:680px;margin:0 auto;padding:100px 20px 60px}
+
+    /* Header card */
+    .cmd-header-card{background:#fff;border-radius:16px;padding:32px 36px;margin-bottom:24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+    .cmd-header-card img{height:38px;margin-bottom:14px}
+    .cmd-header-card h1{font-size:20px;font-weight:600;color:#000;margin-bottom:10px}
+    .cmd-header-card p{font-size:13px;color:#666;line-height:1.6;max-width:50ch;margin:0 auto}
+
+    /* Steps */
+    .cmd-steps-card{background:#fff;border-radius:16px;padding:18px 24px;margin-bottom:4px;box-shadow:0 2px 12px rgba(0,0,0,0.07)}
+    .steps-nav{display:flex;align-items:center;justify-content:center;list-style:none;padding:0;margin:0}
+    .step-item{display:flex;align-items:center;gap:7px;font-size:12px;color:#aaa;font-weight:400;white-space:nowrap}
+    .step-item.active{color:#000;font-weight:700}
+    .step-item.done{color:#888}
+    .step-num{width:24px;height:24px;border-radius:50%;border:2px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#aaa;flex-shrink:0}
+    .step-item.active .step-num{border-color:#000;color:#000}
+    .step-item.done .step-num{background:#000;border-color:#000;color:#fff;font-size:10px}
+    .step-sep{width:24px;height:1px;background:#e0e0e0;margin:0 4px;flex-shrink:0}
+
+    /* Form card */
+    .cmd-form-card{background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.07);overflow:hidden}
+
+    /* Steps panels */
+    .step-panel{display:none;padding:32px 36px}
+    .step-panel.active{display:block}
+    .step-panel h2{font-size:17px;font-weight:700;color:#000;margin-bottom:6px}
+    .step-panel .step-desc{font-size:13px;color:#888;line-height:1.6;margin-bottom:24px}
+
+    /* Fields */
+    .field-label{font-size:13px;color:#555;margin-bottom:6px;display:block;font-weight:500}
+    .field-input{width:100%;padding:12px 16px;border:1.5px solid #e0e0e0;border-radius:10px;font-family:Inter,sans-serif;font-size:14px;color:#000;outline:none;transition:border-color .2s;background:#fff;box-sizing:border-box}
+    .field-input:focus{border-color:#000}
+    textarea.field-input{resize:vertical;min-height:100px}
+    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+    .field-group{margin-bottom:14px;position:relative}
+
+    /* Autocomplete */
+    .autocomplete-wrap{position:relative}
+    .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#aaa;pointer-events:none;z-index:1}
+    .autocomplete-wrap .field-input{padding-left:38px}
+    .autocomplete-list{
+      position:absolute;top:calc(100% + 4px);left:0;right:0;
+      background:#fff;border:1.5px solid #e0e0e0;border-radius:10px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.1);
+      z-index:100;overflow:hidden;display:none;
+    }
+    .autocomplete-list.open{display:block}
+    .autocomplete-item{
+      padding:12px 16px;font-size:13px;color:#333;cursor:pointer;
+      display:flex;align-items:center;gap:10px;
+      border-bottom:1px solid #f5f5f5;transition:background .15s;
+    }
+    .autocomplete-item:last-child{border-bottom:none}
+    .autocomplete-item:hover{background:#f8f8f8}
+    .autocomplete-item svg{flex-shrink:0;color:#888}
+
+    /* Map preview */
+    .map-preview{
+      margin-top:16px;border-radius:12px;overflow:hidden;
+      height:180px;display:none;position:relative;
+      border:1.5px solid #e8e8e8;
+    }
+    .map-preview.visible{display:block}
+    .map-preview iframe{width:100%;height:100%;border:none}
+    .map-verified{
+      display:none;margin-top:10px;
+      background:#f0faf0;border:1.5px solid #b8e6b8;
+      border-radius:8px;padding:10px 14px;
+      font-size:13px;color:#2a7a2a;
+      align-items:center;gap:8px;
+    }
+    .map-verified.visible{display:flex}
+
+    /* Service options */
+    .option-list{display:flex;flex-direction:column;gap:10px}
+    .option-item{
+      display:flex;align-items:center;gap:14px;
+      padding:14px 18px;border:1.5px solid #e8e8e8;border-radius:12px;
+      cursor:pointer;transition:border-color .2s,background .2s;
+      font-size:14px;color:#333;
+    }
+    .option-item:hover{border-color:#bbb;background:#fafafa}
+    .option-item input{width:16px;height:16px;accent-color:#000;cursor:pointer;flex-shrink:0}
+    .option-item:has(input:checked){border-color:#000;background:#f8f8f8;font-weight:500}
+    .option-icon{font-size:18px}
+
+    /* Date/select */
+    select.field-input{cursor:pointer}
+
+    /* Confirm recap */
+    .recap-block{background:#f8f8f8;border-radius:12px;padding:20px;margin-bottom:16px}
+    .recap-block h3{font-size:13px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+    .recap-row{display:flex;justify-content:space-between;font-size:14px;color:#333;padding:6px 0;border-bottom:1px solid #eee}
+    .recap-row:last-child{border-bottom:none}
+    .recap-row span:first-child{color:#888}
+
+    /* Footer */
+    .cmd-footer{
+      padding:20px 36px;display:flex;justify-content:space-between;align-items:center;
+      border-top:1px solid #f0f0f0;
+    }
+    .btn-prev{padding:12px 24px;background:transparent;color:#666;border:1.5px solid #ddd;border-radius:8px;font-family:Inter,sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:border-color .2s,color .2s}
+    .btn-prev:hover{border-color:#aaa;color:#000}
+    .btn-prev.hidden{visibility:hidden}
+    .btn-next{padding:13px 32px;background:#000;color:#fff;border:none;border-radius:8px;font-family:Inter,sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .2s}
+    .btn-next:hover{opacity:.82}
+
+
+    /* ── PLANNING / CALENDAR ── */
+    .plan-notice{
+      display:flex;align-items:flex-start;gap:12px;
+      background:#fffbeb;border:1.5px solid #f5d87a;border-radius:12px;
+      padding:16px 18px;margin-bottom:24px;font-size:13px;color:#7a5c00;line-height:1.6;
+    }
+    .plan-notice-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+    .plan-notice strong{display:block;margin-bottom:3px;color:#5a4000}
+
+    .cal-wrap{display:grid;grid-template-columns:1fr 180px;gap:20px;align-items:start}
+    .cal-left{border:1.5px solid #e8e8e8;border-radius:12px;overflow:hidden}
+    .cal-header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:14px 18px;border-bottom:1px solid #f0f0f0;
+      font-weight:600;font-size:15px;color:#000;
+    }
+    .cal-nav{
+      background:none;border:1.5px solid #e0e0e0;border-radius:6px;
+      width:30px;height:30px;cursor:pointer;font-size:16px;color:#555;
+      display:flex;align-items:center;justify-content:center;
+      transition:background .15s,border-color .15s;
+    }
+    .cal-nav:hover{background:#f5f5f5;border-color:#aaa}
+    .cal-grid{
+      display:grid;grid-template-columns:repeat(7,1fr);
+      padding:8px 10px 4px;gap:2px;
+    }
+    .cal-day-name{text-align:center;font-size:11px;color:#aaa;font-weight:600;padding:4px 0;text-transform:uppercase;letter-spacing:.5px}
+    .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:4px 10px 12px}
+    .cal-day{
+      text-align:center;padding:8px 4px;font-size:13px;color:#333;
+      border-radius:8px;cursor:pointer;transition:background .15s,color .15s;border:1.5px solid transparent;
+    }
+    .cal-day:hover{background:#f0f0f0}
+    .cal-day.selected{background:#000;color:#fff;border-color:#000;font-weight:700}
+    .cal-day.past{color:#ccc;cursor:default;pointer-events:none}
+    .cal-day.empty{pointer-events:none}
+    .cal-day.today{border-color:#ddd;font-weight:600}
+
+    .cal-right{border:1.5px solid #e8e8e8;border-radius:12px;padding:16px}
+    .cal-right-hint{font-size:13px;color:#aaa;line-height:1.6;text-align:center;margin:0}
+    .time-options{display:flex;flex-direction:column;gap:8px}
+    .time-option{
+      display:flex;align-items:center;gap:10px;
+      padding:12px 14px;border:1.5px solid #e8e8e8;border-radius:10px;
+      cursor:pointer;transition:border-color .2s,background .2s;font-size:13px;color:#333;
+    }
+    .time-option:hover{border-color:#bbb;background:#fafafa}
+    .time-option input[type=radio]{width:15px;height:15px;accent-color:#000;flex-shrink:0;cursor:pointer}
+    .time-option:has(input:checked){border-color:#000;background:#f8f8f8;font-weight:500}
+    .time-option small{display:block;font-size:11px;color:#aaa;font-weight:400}
+
+    @media(max-width:600px){.cal-wrap{grid-template-columns:1fr}.cal-right{margin-top:0}}
+
+    @media(max-width:600px){
+      .cmd-wrapper{padding:80px 12px 40px}
+      .step-panel{padding:24px 20px}
+      .cmd-footer{padding:16px 20px}
+      .field-row{grid-template-columns:1fr}
+      .steps-nav{gap:0}
+      .step-sep{width:12px}
+      .step-item span.step-label{display:none}
+    }
+  
+  .addr-map{height:220px;border-radius:12px;overflow:hidden;margin-top:14px;border:1px solid #e6e6e6}
+  .addr-fields-title{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.6px;margin:16px 0 12px;padding:10px 14px;background:#f8f8f8;border-radius:8px;border-left:3px solid #000}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:0}
+  .field-error{border-color:#e53935 !important}
+</style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script>
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries","places");e.set("key","AIzaSyD5tZG-3LafrWLYeF3buTLxg_yQTdISE-U");e.set("v","weekly");a.src=`https://maps.googleapis.com/maps/api/js?`+e;a.onerror=()=>n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a);d[q]=f},d[l]||(d[l]=async(...o)=>{r.add(o[0]);await u();return d[l](...o)})});l=async()=>{await google.maps.importLibrary("places");};l();
+    })();
+  </script>
+</head>
+<body>
+<nav id="navbar">
+  <a class="nav-logo" href="index.html"><img src="img/logo.png" alt="KAZA STUDIO"></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#galerie">Notre Travail</a></li>
+    <li><a href="reservation.html">À propos</a></li>
+  </ul>
+  <a class="nav-book" href="reservation.html">RÉSERVER</a>
+</nav>
+
+<div class="cmd-wrapper">
+
+  <!-- Header -->
+  <div class="cmd-header-card">
+    <img src="img/logo.png" alt="KAZA STUDIO" onerror="this.style.display='none'">
+    <h1>Formulaire de commande</h1>
+    <p>Veuillez remplir les informations ci-dessous. La confirmation finale de votre rendez-vous sera effectuée une fois votre demande reçue.</p>
+  </div>
+
+  <!-- Steps nav -->
+  <div class="cmd-steps-card">
+    <ul class="steps-nav" id="stepsNav">
+      <li class="step-item active" data-step="1"><span class="step-num">1</span><span class="step-label">Adresse</span></li>
+      <div class="step-sep"></div>
+      <li class="step-item" data-step="2"><span class="step-num">2</span><span class="step-label">Services</span></li>
+      <div class="step-sep"></div>
+      <li class="step-item" data-step="3"><span class="step-num">3</span><span class="step-label">Planning</span></li>
+      <div class="step-sep"></div>
+      <li class="step-item" data-step="4"><span class="step-num">4</span><span class="step-label">Contact</span></li>
+      <div class="step-sep"></div>
+      <li class="step-item" data-step="5"><span class="step-num">5</span><span class="step-label">Confirmer</span></li>
+    </ul>
+  </div>
+
+  <!-- Form card -->
+  <div class="cmd-form-card">
+    <form id="cmdForm" name="commande" method="POST" data-netlify="true" action="https://formspree.io/f/mbdaezqq">
+      <input type="hidden" name="_next" value="https://kazastudio.netlify.app/merci.html">
+      <input type="hidden" name="_subject" value="Nouvelle commande KAZA STUDIO 📸">
+      <input type="hidden" name="adresse_complete" id="hiddenAdresse">
+      <input type="hidden" name="services_choisis" id="hiddenServices">
+
+      <!-- STEP 1 : Adresse -->
+      <div class="step-panel active" id="panel-1">
+        <h2>Adresse du bien</h2>
+        <p class="step-desc">Recherchez l'adresse puis vérifiez les champs remplis automatiquement.</p>
+
+        <!-- Champ de recherche -->
+        <div class="field-group autocomplete-wrap">
+          <label class="field-label">Rechercher l'adresse</label>
+          <svg class="search-icon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input class="field-input" type="text" id="addressInput" placeholder="Ex : 12 rue de la Mer, Antibes..." autocomplete="off">
+          <div class="autocomplete-list" id="autocompleteList"></div>
+        </div>
+
+        <!-- Champs décomposés (visibles après sélection) -->
+        <div id="addrFields" style="display:none">
+          <div class="addr-fields-title">📍 Vérifiez et modifiez si nécessaire</div>
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">Numéro</label>
+              <input class="field-input" type="text" name="addr_numero" id="addrNumero" placeholder="30">
+            </div>
+            <div class="field-group" style="grid-column:span 1">
+              <label class="field-label">Type de voie</label>
+              <input class="field-input" type="text" name="addr_type_voie" id="addrTypeVoie" placeholder="Rue">
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Nom de la rue</label>
+            <input class="field-input" type="text" name="addr_rue" id="addrRue" placeholder="Fourmillière">
+          </div>
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">Code postal</label>
+              <input class="field-input" type="text" name="addr_cp" id="addrCP" placeholder="06600">
+            </div>
+            <div class="field-group">
+              <label class="field-label">Ville</label>
+              <input class="field-input" type="text" name="addr_ville" id="addrVille" placeholder="Antibes">
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Complément d'adresse <span style="color:#bbb;font-weight:400">(optionnel)</span></label>
+            <input class="field-input" type="text" name="addr_complement" id="addrComplement" placeholder="Bât B, Résidence Les Pins, Étage 3...">
+          </div>
+          <div class="field-group">
+            <label class="field-label">Surface approximative (m²)</label>
+            <input class="field-input" type="number" name="surface" id="surfaceInput" placeholder="Ex : 85">
+          </div>
+        </div>
+
+        <!-- Carte -->
+        <div class="map-preview" id="mapPreview">
+          <div id="map" style="width:100%;height:180px"></div>
+        </div>
+        <div class="map-verified" id="mapVerified">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="mapVerifiedText">Adresse vérifiée</span>
+        </div>
+      </div>
+
+      <!-- STEP 2 : Services -->
+      <div class="step-panel" id="panel-2">
+        <h2>Services souhaités</h2>
+        <p class="step-desc">Sélectionnez les prestations qui correspondent à votre projet.</p>
+        <div class="option-list">
+          <label class="option-item">
+            <input type="checkbox" name="service" value="Photo Immobilière">
+            <span class="option-icon">📷</span>
+            <span>Photo Immobilière</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="service" value="Vidéo Cinématique">
+            <span class="option-icon">🎬</span>
+            <span>Vidéo Cinématique</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="service" value="Pack Photo + Vidéo">
+            <span class="option-icon">📦</span>
+            <span>Pack Photo + Vidéo</span>
+          </label>
+          <label class="option-item">
+            <input type="checkbox" name="service" value="Drone Aérien">
+            <span class="option-icon">🚁</span>
+            <span>Drone Aérien</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- STEP 3 : Planning -->
+      <div class="step-panel" id="panel-3">
+        <h2>Planning</h2>
+        <p class="step-desc">Ceci n'est pas une confirmation définitive. Je vérifierai mes disponibilités et vous recontacterai pour confirmer.</p>
+
+        <!-- Notice banner -->
+        <div class="plan-notice">
+          <span class="plan-notice-icon">⚠️</span>
+          <div>
+            <strong>Confirmation à venir</strong><br>
+            <span>Veuillez indiquer votre créneau préféré. Je vérifierai mes disponibilités et vous confirmerai le rendez-vous.</span>
+          </div>
+        </div>
+
+        <!-- Calendar + Time side by side -->
+        <div class="cal-wrap">
+          <div class="cal-left">
+            <div class="cal-header">
+              <button type="button" class="cal-nav" id="calPrev">‹</button>
+              <span id="calMonthLabel">Mars 2026</span>
+              <button type="button" class="cal-nav" id="calNext">›</button>
+            </div>
+            <div class="cal-grid">
+              <div class="cal-day-name">Dim</div>
+              <div class="cal-day-name">Lun</div>
+              <div class="cal-day-name">Mar</div>
+              <div class="cal-day-name">Mer</div>
+              <div class="cal-day-name">Jeu</div>
+              <div class="cal-day-name">Ven</div>
+              <div class="cal-day-name">Sam</div>
+            </div>
+            <div class="cal-days" id="calDays"></div>
+          </div>
+          <div class="cal-right" id="calRight">
+            <p class="cal-right-hint" id="calRightHint">Sélectionnez une date pour choisir un créneau</p>
+            <div class="time-options" id="timeOptions" style="display:none">
+              <label class="time-option">
+                <input type="radio" name="creneau" value="Matin (8h–12h)">
+                <span>Matin <small>(8h–12h)</small></span>
+              </label>
+              <label class="time-option">
+                <input type="radio" name="creneau" value="Midi (12h–14h)">
+                <span>Midi <small>(12h–14h)</small></span>
+              </label>
+              <label class="time-option">
+                <input type="radio" name="creneau" value="Après-midi (14h–18h)">
+                <span>Après-midi <small>(14h–18h)</small></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <input type="hidden" name="date" id="dateInput">
+
+        <!-- Additional dates -->
+        <div class="field-group" style="margin-top:20px">
+          <label class="field-label">Dates alternatives (optionnel)</label>
+          <input class="field-input" type="text" name="dates_alternatives" placeholder="Ex : 10 mars matin, 12 mars après-midi...">
+        </div>
+      </div>
+
+      <!-- STEP 4 : Contact -->
+      <div class="step-panel" id="panel-4">
+        <h2>Vos coordonnées</h2>
+        <p class="step-desc">Comment vous contacter pour confirmer le rendez-vous ?</p>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Prénom (requis)</label>
+            <input class="field-input" type="text" name="prenom" id="prenomInput" placeholder="Jean" required>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Nom (requis)</label>
+            <input class="field-input" type="text" name="nom" id="nomInput" placeholder="Dupont" required>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Email (requis)</label>
+            <input class="field-input" type="email" name="email" id="emailInput" placeholder="votre@email.com" required>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Téléphone</label>
+            <input class="field-input" type="tel" name="telephone" id="telInput" placeholder="+33 6 XX XX XX XX">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Message / précisions</label>
+          <textarea class="field-input" name="message" id="msgInput" placeholder="Informations complémentaires, accès, contraintes..."></textarea>
+        </div>
+      </div>
+
+      <!-- STEP 5 : Confirmer -->
+      <div class="step-panel" id="panel-5">
+        <h2>Confirmation</h2>
+        <p class="step-desc">Vérifiez vos informations avant d'envoyer la demande.</p>
+        <div class="recap-block">
+          <h3>Bien immobilier</h3>
+          <div class="recap-row"><span>Adresse</span><span id="recap-adresse">—</span></div>
+          <div class="recap-row"><span>Surface</span><span id="recap-surface">—</span></div>
+        </div>
+        <div class="recap-block">
+          <h3>Services</h3>
+          <div class="recap-row"><span>Prestations</span><span id="recap-services">—</span></div>
+        </div>
+        <div class="recap-block">
+          <h3>Planning</h3>
+          <div class="recap-row"><span>Date</span><span id="recap-date">—</span></div>
+          <div class="recap-row"><span>Créneau</span><span id="recap-creneau">—</span></div>
+        </div>
+        <div class="recap-block">
+          <h3>Contact</h3>
+          <div class="recap-row"><span>Nom</span><span id="recap-nom">—</span></div>
+          <div class="recap-row"><span>Email</span><span id="recap-email">—</span></div>
+          <div class="recap-row"><span>Téléphone</span><span id="recap-tel">—</span></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="cmd-footer">
+        <button type="button" class="btn-prev hidden" id="btnPrev">← Retour</button>
+        <button type="button" class="btn-next" id="btnNext">Étape suivante →</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<footer>
+  <span>KAZA STUDIO | CÔTE D'AZUR</span>
+  <span></span>
+  <a href="mailto:kazastudio.contact@gmail.com">kazastudio.contact@gmail.com</a>
+</footer>
+
+
+
+
+<script>
+// ══════════════════════════════════════════════════════
+//  KAZA STUDIO — Places API (New) + Leaflet
+// ══════════════════════════════════════════════════════
+
+const addressInput   = document.getElementById('addressInput');
+const autoList       = document.getElementById('autocompleteList');
+const hiddenAdresse  = document.getElementById('hiddenAdresse');
+const mapPreview     = document.getElementById('mapPreview');
+const mapVerified    = document.getElementById('mapVerified');
+const hiddenServices = document.getElementById('hiddenServices');
+
+// ── Leaflet map
+let mapInstance = null, mapMarker = null;
+function initLeafletMap(lat, lon){
+  if(!mapInstance){
+    mapInstance = L.map('map', { zoomControl:true }).setView([lat,lon], 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      maxZoom:19, attribution:'© OpenStreetMap'
+    }).addTo(mapInstance);
+    mapMarker = L.marker([lat,lon],{ draggable:true }).addTo(mapInstance);
+    setTimeout(()=> mapInstance.invalidateSize(), 250);
+  } else {
+    mapInstance.setView([lat,lon], 16);
+    mapMarker.setLatLng([lat,lon]);
+    mapInstance.invalidateSize();
+  }
+}
+
+// ── Parser une adresse française
+function parseAddress(label){
+  // Ex: "30 Rue Fourmillière, 06600 Antibes, France"
+  // Ex: "Avenue des Fleurs 12, 06000 Nice, France"
+  const result = { numero:'', typeVoie:'', rue:'', cp:'', ville:'' };
+
+  // Liste complète des types de voie français
+  const TYPES = ['Allée','Allées','Avenue','Bd','Boulevard','Carrefour','Chemin',
+    'Cité','Clos','Côte','Cours','Domaine','Esplanade','Hameau','Impasse',
+    'Lieu-dit','Lotissement','Montée','Passage','Place','Promenade',
+    'Résidence','Rond-point','Route','Rue','Ruelle','Sentier','Square',
+    'Traverse','Villa','Voie','Zone'];
+
+  const typesPattern = TYPES.join('|');
+
+  // Extraire code postal (5 chiffres) et ville
+  const cpMatch = label.match(/(\d{5})\s+([A-Za-zÀ-ÿ\s\-]+?)(?:,|$)/);
+  if(cpMatch){
+    result.cp    = cpMatch[1];
+    result.ville = cpMatch[2].trim().replace(/,.*$/, '').trim();
+  }
+
+  // Extraire la première partie (avant la virgule) = la rue
+  const firstPart = label.split(',')[0].trim();
+
+  // Cas 1 : commence par un numéro → "30 Rue Fourmillière"
+  const case1 = firstPart.match(new RegExp('^(\\d+[\\s]?(?:bis|ter|quater)?)[\\s]+('+typesPattern+')[\\s]+(.+)$', 'i'));
+  if(case1){
+    result.numero   = case1[1].trim();
+    result.typeVoie = case1[2].trim();
+    result.rue      = case1[3].trim();
+    return result;
+  }
+
+  // Cas 2 : type de voie en premier → "Rue de la Paix 5"
+  const case2 = firstPart.match(new RegExp('^('+typesPattern+')[\\s]+(.+?)[\\s]+(\\d+[\\s]?(?:bis|ter)?)$', 'i'));
+  if(case2){
+    result.typeVoie = case2[1].trim();
+    result.rue      = case2[2].trim();
+    result.numero   = case2[3].trim();
+    return result;
+  }
+
+  // Cas 3 : type de voie sans numéro → "Rue de la Paix"
+  const case3 = firstPart.match(new RegExp('^('+typesPattern+')[\\s]+(.+)$', 'i'));
+  if(case3){
+    result.typeVoie = case3[1].trim();
+    result.rue      = case3[2].trim();
+    return result;
+  }
+
+  // Cas 4 : juste un numéro + texte → "30 Fourmillière"
+  const case4 = firstPart.match(/^(\d+[a-z]?)\s+(.+)$/i);
+  if(case4){
+    result.numero = case4[1].trim();
+    result.rue    = case4[2].trim();
+    return result;
+  }
+
+  // Fallback
+  result.rue = firstPart;
+  return result;
+}
+
+// ── Sélection adresse
+// Compatibilité fallback
+function selectAddress(label, lat, lon){
+  const parsed = parseAddress(label);
+  selectAddressComponents(label, lat, lon, parsed.numero, parsed.typeVoie, parsed.rue, parsed.cp, parsed.ville);
+}
+
+function selectAddressComponents(label, lat, lon, numero, typeVoie, nomRue, cp, ville){
+  addressInput.value = label;
+  if(hiddenAdresse) hiddenAdresse.value = label;
+  autoList.classList.remove('open');
+
+  // Afficher les champs décomposés
+  const addrFields = document.getElementById('addrFields');
+  if(addrFields) addrFields.style.display = 'block';
+
+  // Remplir chaque champ (même si valeur vide → on laisse blanc pour saisie manuelle)
+  const fill = (id, val) => { const el=document.getElementById(id); if(el) el.value = val||''; };
+  fill('addrNumero',   numero);
+  fill('addrTypeVoie', typeVoie);
+  fill('addrRue',      nomRue);
+  fill('addrCP',       cp);
+  fill('addrVille',    ville);
+
+  // Carte Leaflet
+  mapPreview.style.display = 'block';
+  initLeafletMap(lat, lon);
+  if(mapVerified){
+    mapVerified.style.display = 'flex';
+    document.getElementById('mapVerifiedText').textContent = (numero+' '+nomRue).trim() + ' — adresse vérifiée';
+  }
+}
+
+// ── Afficher suggestions
+function renderSuggestions(items){
+  autoList.innerHTML = '';
+  if(!items.length){ autoList.classList.remove('open'); return; }
+  items.forEach(it => {
+    const div = document.createElement('div');
+    div.className = 'autocomplete-item';
+    div.innerHTML = '<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg><span>' + it.label + '</span>';
+    div.addEventListener('click', () => handleSelect(it));
+    autoList.appendChild(div);
+  });
+  autoList.classList.add('open');
+}
+
+// ── Résoudre place_id → lat/lon via Places API (New)
+async function handleSelect(it){
+  if(it.placeId){
+    try{
+      const { Place } = await google.maps.importLibrary("places");
+      const place = new Place({ id: it.placeId, requestedLanguage: 'fr' });
+      await place.fetchFields({ fields: ['location','displayName','addressComponents','formattedAddress'] });
+      const loc  = place.location;
+      const addr = place.addressComponents || [];
+
+      // Extraire chaque composant depuis addressComponents
+      const get = (types) => {
+        const comp = addr.find(c => types.some(t => c.types && c.types.includes(t)));
+        return comp ? comp.longText || comp.shortText || '' : '';
+      };
+      const numero   = get(['street_number']);
+      const route    = get(['route']);
+      const cp       = get(['postal_code']);
+      const ville    = get(['locality','postal_town']);
+      const fullAddr = place.formattedAddress || it.label;
+
+      // Séparer type de voie et nom de rue depuis 'route'
+      // Ex: "Rue Fourmillière" → typeVoie="Rue", rue="Fourmillière"
+      const TYPES = ['Allée','Allées','Avenue','Bd','Boulevard','Carrefour','Chemin',
+        'Cité','Clos','Côte','Cours','Domaine','Esplanade','Hameau','Impasse',
+        'Lieu-dit','Lotissement','Montée','Passage','Place','Promenade',
+        'Résidence','Rond-point','Route','Rue','Ruelle','Sentier','Square',
+        'Traverse','Villa','Voie','Zone'];
+      let typeVoie = '', nomRue = route;
+      const routeMatch = route.match(new RegExp('^('+TYPES.join('|')+')\\s+(.+)$','i'));
+      if(routeMatch){ typeVoie = routeMatch[1]; nomRue = routeMatch[2]; }
+
+      selectAddressComponents(fullAddr, loc.lat(), loc.lng(), numero, typeVoie, nomRue, cp, ville);
+    } catch(e){
+      console.error('Places API error:', e);
+      // Fallback : parser le texte brut
+      selectAddress(it.label, 43.5804, 7.1251);
+    }
+  } else {
+    // Fallback Nominatim : lat/lon + parser texte
+    const parsed = parseAddress(it.label);
+    selectAddressComponents(it.label, it.lat, it.lon,
+      parsed.numero, parsed.typeVoie, parsed.rue, parsed.cp, parsed.ville);
+  }
+}
+
+// ── Saisie utilisateur
+let debounceTimer;
+addressInput.addEventListener('input', async function(){
+  const q = this.value.trim();
+  if(hiddenAdresse) hiddenAdresse.value = q;
+  clearTimeout(debounceTimer);
+  if(q.length < 3){ autoList.classList.remove('open'); return; }
+
+  debounceTimer = setTimeout(async () => {
+    try {
+      const { AutocompleteSuggestion } = await google.maps.importLibrary("places");
+      const { suggestions } = await AutocompleteSuggestion.fetchAutocompleteSuggestions({
+        input: q,
+        includedRegionCodes: ['fr'],
+        types: ['address']
+      });
+      if(suggestions && suggestions.length){
+        renderSuggestions(suggestions.map(s => ({
+          label: s.placePrediction.text.toString(),
+          placeId: s.placePrediction.placeId
+        })));
+      } else {
+        autoList.classList.remove('open');
+      }
+    } catch(e) {
+      // Fallback Nominatim
+      fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=fr&q=' + encodeURIComponent(q),
+        { headers:{'Accept-Language':'fr'} })
+        .then(r => r.json())
+        .then(data => renderSuggestions(data.map(d => ({ label: d.display_name, lat: parseFloat(d.lat), lon: parseFloat(d.lon) }))))
+        .catch(() => autoList.classList.remove('open'));
+    }
+  }, 200);
+});
+
+document.addEventListener('click', e => {
+  if(!autoList.contains(e.target) && e.target !== addressInput)
+    autoList.classList.remove('open');
+});
+
+// ══════════════════════════════════════════════════════
+//  NAVIGATION ÉTAPES
+// ══════════════════════════════════════════════════════
+const panels    = Array.from(document.querySelectorAll('.step-panel'));
+const stepItems = Array.from(document.querySelectorAll('#stepsNav .step-item'));
+const btnNext   = document.getElementById('btnNext');
+const btnPrev   = document.getElementById('btnPrev');
+let current     = 0;
+
+function showPanel(n){
+  panels.forEach((p,i)    => p.classList.toggle('active', i===n));
+  stepItems.forEach((s,i) => {
+    s.classList.toggle('active', i===n);
+    s.classList.toggle('done',   i<n);
+  });
+  btnPrev.classList.toggle('hidden', n===0);
+  btnNext.textContent = (n===panels.length-1) ? 'Envoyer la commande ✓' : 'Étape suivante →';
+  current = n;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function validatePanel(n){
+  const panel = panels[n];
+  let ok = true;
+  panel.querySelectorAll('[required]').forEach(f => {
+    f.classList.remove('field-error');
+    if(!f.value.trim()){ f.classList.add('field-error'); ok=false; }
+  });
+  if(n===0){
+    addressInput.classList.remove('field-error');
+    const addrVal = addressInput.value.trim();
+    // Accepter aussi si l'utilisateur a rempli manuellement addrRue
+    const rueFallback = document.getElementById('addrRue')?.value.trim() || '';
+    if(!addrVal && !rueFallback){
+      addressInput.classList.add('field-error');
+      ok=false;
+    } else {
+      // Construire adresse complète depuis les champs si saisie manuelle
+      if(!addrVal && rueFallback){
+        const num  = document.getElementById('addrNumero')?.value.trim()||'';
+        const type = document.getElementById('addrTypeVoie')?.value.trim()||'';
+        const rue  = rueFallback;
+        const cp   = document.getElementById('addrCP')?.value.trim()||'';
+        const vil  = document.getElementById('addrVille')?.value.trim()||'';
+        const full = [num, type, rue, cp?cp+' '+vil:''].filter(Boolean).join(' ');
+        addressInput.value = full;
+      }
+      if(hiddenAdresse) hiddenAdresse.value = addressInput.value.trim();
+    }
+  }
+  if(!ok) panel.querySelector('.field-error')?.focus();
+  return ok;
+}
+
+btnNext.addEventListener('click', () => {
+  if(!validatePanel(current)) return;
+  if(current < panels.length-1){
+    current++;
+    showPanel(current);
+    if(current === panels.length-1) updateRecap();
+  } else {
+    document.getElementById('cmdForm').submit();
+  }
+});
+btnPrev.addEventListener('click', () => { if(current>0) showPanel(current-1); });
+
+// ══════════════════════════════════════════════════════
+//  CALENDRIER
+// ══════════════════════════════════════════════════════
+const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const now2   = new Date();
+let calY = now2.getFullYear(), calM = now2.getMonth(), selDate = null;
+
+function renderCal(y,m){
+  calY=y; calM=m;
+  document.getElementById('calMonthLabel').textContent = MONTHS[m]+' '+y;
+  const el = document.getElementById('calDays');
+  el.innerHTML = '';
+  const first   = new Date(y,m,1).getDay();
+  const total   = new Date(y,m+1,0).getDate();
+  const todayMs = new Date(now2.getFullYear(),now2.getMonth(),now2.getDate()).getTime();
+  for(let i=0;i<first;i++){ const e=document.createElement('div');e.className='cal-day empty';el.appendChild(e); }
+  for(let d=1;d<=total;d++){
+    const e  = document.createElement('div');
+    const ms = new Date(y,m,d).getTime();
+    e.className = 'cal-day'+(ms<todayMs?' past':'')+(ms===todayMs?' today':'');
+    if(selDate&&selDate.d===d&&selDate.m===m&&selDate.y===y) e.classList.add('selected');
+    e.textContent = d;
+    e.addEventListener('click', ()=>pickDate(d,m,y,e));
+    el.appendChild(e);
+  }
+}
+
+function pickDate(d,m,y,el){
+  document.querySelectorAll('.cal-day.selected').forEach(x=>x.classList.remove('selected'));
+  el.classList.add('selected');
+  selDate = {d,m,y};
+  document.getElementById('calRightHint').style.display='none';
+  document.getElementById('timeOptions').style.display='flex';
+  const label = d+' '+MONTHS[m]+' '+y;
+  document.querySelectorAll('input[name="creneau"]').forEach(r=>{
+    r.onchange = ()=>{ document.getElementById('dateInput').value = label+' — '+r.value; };
+  });
+}
+
+document.getElementById('calPrev').addEventListener('click',()=>{
+  let m=calM-1,y=calY; if(m<0){m=11;y--;} renderCal(y,m);
+});
+document.getElementById('calNext').addEventListener('click',()=>{
+  let m=calM+1,y=calY; if(m>11){m=0;y++;} renderCal(y,m);
+});
+
+// ══════════════════════════════════════════════════════
+//  SERVICES
+// ══════════════════════════════════════════════════════
+document.querySelectorAll('input[name="service"]').forEach(cb=>{
+  cb.addEventListener('change',()=>{
+    if(hiddenServices) hiddenServices.value =
+      Array.from(document.querySelectorAll('input[name="service"]:checked')).map(c=>c.value).join(', ');
+  });
+});
+
+// ══════════════════════════════════════════════════════
+//  RÉCAP
+// ══════════════════════════════════════════════════════
+function updateRecap(){
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v||'—';};
+  const g  =id=>document.getElementById(id)?.value||'';
+  // Récap adresse : reconstruire depuis les champs si remplis
+  const rNum  = g('addrNumero'), rType = g('addrTypeVoie'), rRue = g('addrRue');
+  const rCP   = g('addrCP'), rVil = g('addrVille'), rComp = g('addrComplement');
+  const addrFull = rRue
+    ? [rNum, rType, rRue, rComp, rCP?rCP+' '+rVil:''].filter(Boolean).join(' ')
+    : g('addressInput');
+  set('recap-adresse', addrFull);
+  set('recap-surface',  g('surfaceInput')?g('surfaceInput')+' m²':'');
+  set('recap-services', g('hiddenServices'));
+  set('recap-date',     g('dateInput'));
+  set('recap-creneau',  document.querySelector('input[name="creneau"]:checked')?.value||'');
+  set('recap-nom',      (g('prenomInput')+' '+g('nomInput')).trim());
+  set('recap-email',    g('emailInput'));
+  set('recap-tel',      g('telInput'));
+}
+
+// ── Init
+showPanel(0);
+renderCal(calY, calM);
+</script>
+</body>
+</html>

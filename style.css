@@ -1,0 +1,226 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:Inter,system-ui,Arial,sans-serif;
+  background:#000;
+  color:#fff;
+}
+
+/* NAV */
+nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 48px;
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(0,0,0,0.72);
+  backdrop-filter:blur(12px);
+  transition:padding .3s,background .3s;
+}
+nav.scrolled{
+  padding:10px 48px;
+  background:rgba(0,0,0,0.92);
+}
+.nav-logo img{height:52px;width:auto;transition:height .3s}
+nav.scrolled .nav-logo img{height:42px}
+.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
+.nav-links a{color:#fff;text-decoration:none;font-size:14px;font-weight:400;letter-spacing:.5px;transition:opacity .2s}
+.nav-links a:hover{opacity:.55}
+.nav-book{
+  border:1px solid #fff;padding:10px 26px;border-radius:50px;
+  color:#fff;text-decoration:none;font-size:13px;font-weight:500;
+  letter-spacing:1px;text-transform:uppercase;
+  transition:background .2s,color .2s;
+}
+.nav-book:hover{background:#fff;color:#000}
+
+/* SCROLL ANIMATIONS */
+.reveal{
+  opacity:0;transform:translateY(40px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-left{
+  opacity:0;transform:translateX(-40px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reveal-left.visible{opacity:1;transform:translateX(0)}
+.reveal-right{
+  opacity:0;transform:translateX(40px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.reveal-right.visible{opacity:1;transform:translateX(0)}
+
+/* HERO */
+.hero{
+  height:100vh;
+  background:#111 url('img/hero.jpg') center/cover no-repeat;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:80px;
+  position:relative;text-align:center;
+}
+.hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.hero-content{position:relative;z-index:1}
+.hero h1{font-size:clamp(34px,5.5vw,74px);font-weight:700;line-height:1.05;letter-spacing:-1px;margin-bottom:16px}
+.hero p{font-size:16px;font-weight:300;letter-spacing:1px;opacity:.85;margin-bottom:28px}
+.btn-outline{
+  border:1px solid #fff;padding:14px 36px;border-radius:50px;
+  color:#fff;text-decoration:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;
+  transition:background .2s,color .2s;display:inline-block;
+}
+.btn-outline:hover{background:#fff;color:#000}
+.location-tag{font-size:12px;letter-spacing:2px;opacity:.65;margin-bottom:12px;text-transform:uppercase}
+
+/* GALLERY */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px}
+.gallery-item{aspect-ratio:4/3;overflow:hidden;background:#1a1a1a}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.gallery-item:hover img{transform:scale(1.05)}
+.placeholder{
+  width:100%;height:100%;
+  background:linear-gradient(135deg,#1e1e1e,#2a2a2a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:#555;letter-spacing:1px;text-transform:uppercase;
+}
+
+/* SECTIONS */
+section{padding:80px 48px}
+.section-title{font-size:clamp(26px,4vw,46px);font-weight:700;margin-bottom:12px}
+.section-sub{color:rgba(255,255,255,.5);font-size:15px;margin-bottom:48px;max-width:60ch}
+
+/* QUI JE SUIS */
+.about{background:#000;text-align:center;padding:100px 48px}
+.about .section-title{margin-bottom:20px}
+.about p{color:rgba(255,255,255,.62);max-width:62ch;margin:0 auto;line-height:1.8;font-size:16px}
+
+/* SERVICES */
+.services{background:#0a0a0a}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.service-card{background:#fff;color:#000;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.service-card .card-img{height:240px;overflow:hidden}
+.service-card .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.service-card:hover .card-img img{transform:scale(1.05)}
+.service-card .card-img .placeholder{height:240px;background:linear-gradient(135deg,#d0d0d0,#e8e8e8);color:#aaa}
+.service-card .card-body{padding:28px 24px;flex:1;display:flex;flex-direction:column}
+.service-card h3{font-size:19px;font-weight:700;margin-bottom:8px}
+.service-card p{font-size:13px;color:#555;line-height:1.6;flex:1;margin-bottom:24px}
+.btn-book{
+  display:block;text-align:center;border:1.5px solid #000;border-radius:50px;
+  padding:13px 24px;color:#000;text-decoration:none;
+  font-size:12px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;
+  transition:background .2s,color .2s;
+}
+.btn-book:hover{background:#000;color:#fff}
+
+/* CTA BAND */
+.cta-band{
+  min-height:60vh;
+  background:#111 url('img/hero2.jpg') center/cover no-repeat;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;position:relative;padding:80px 48px;
+}
+.cta-band::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.cta-band *{position:relative;z-index:1}
+.cta-band h2{font-size:clamp(26px,5vw,58px);font-weight:700;margin-bottom:16px}
+.cta-band p{font-size:15px;opacity:.65;margin-bottom:32px}
+
+/* FOOTER */
+footer{
+  background:#000;padding:30px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(255,255,255,.08);
+  font-size:13px;color:rgba(255,255,255,.45);letter-spacing:.5px;
+}
+footer a{color:rgba(255,255,255,.45);text-decoration:none;transition:color .2s}
+footer a:hover{color:#fff}
+
+/* CONTACT PAGE */
+.contact-hero{
+  min-height:55vh;
+  background:#111 url('img/hero.jpg') center/cover no-repeat;
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;
+  padding:120px 48px 60px;position:relative;
+}
+.contact-hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.contact-hero *{position:relative;z-index:1}
+.contact-hero h1{font-size:clamp(24px,4vw,50px);font-weight:700;max-width:55ch;line-height:1.2}
+.contact-hero .email-tag{margin-top:14px;font-size:15px;opacity:.55}
+
+.contact-form-section{
+  background:#000;padding:80px 48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;
+}
+.form-group{margin-bottom:20px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:block;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:8px;letter-spacing:.5px}
+input,textarea,select{
+  width:100%;padding:14px 16px;
+  background:#fff;color:#000;
+  border:none;border-radius:4px;
+  font-family:Inter,sans-serif;font-size:14px;outline:none;
+}
+textarea{min-height:120px;resize:vertical}
+.checkbox-group{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.checkbox-item{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,255,255,.75);cursor:pointer}
+.checkbox-item input[type=checkbox]{width:16px;height:16px;accent-color:#000;flex-shrink:0}
+.btn-submit{
+  margin-top:24px;padding:14px 48px;
+  background:#fff;color:#000;border:none;border-radius:4px;
+  font-size:13px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;
+  cursor:pointer;transition:opacity .2s;
+}
+.btn-submit:hover{opacity:.8}
+.contact-info h3{font-size:22px;font-weight:600;margin-bottom:20px}
+.contact-info p{color:rgba(255,255,255,.5);font-size:15px;line-height:1.8;margin-bottom:12px}
+
+/* RESERVATION PAGE */
+.resa-hero{
+  min-height:65vh;
+  background:#111 url('img/hero2.jpg') center/cover no-repeat;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;position:relative;padding:120px 48px 60px;
+}
+.resa-hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.resa-hero *{position:relative;z-index:1}
+.resa-hero h1{font-size:clamp(30px,6vw,70px);font-weight:700;margin-bottom:16px}
+.resa-hero p{font-size:16px;opacity:.6;max-width:58ch;margin:0 auto}
+
+.resa-cards{background:#f0f0f0;padding:80px 48px}
+.resa-cards .section-title{color:#000}
+.resa-cards .section-sub{color:#666}
+.resa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+
+@media(max-width:900px){
+  nav{padding:12px 20px}
+  nav.scrolled{padding:8px 20px}
+  section,footer,.contact-hero,.contact-form-section,.resa-hero,.resa-cards,.about{padding-left:20px;padding-right:20px}
+  .services-grid,.resa-grid{grid-template-columns:1fr}
+  .gallery{grid-template-columns:1fr 1fr}
+  .contact-form-section{grid-template-columns:1fr;gap:40px}
+  .form-row{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+
+/* ── POURQUOI SECTION ── */
+.pq-section{background:#ffffff;padding:80px 60px 60px;text-align:center}
+.pq-sub{font-size:14px;color:#777;max-width:460px;margin:0 auto 52px;line-height:1.7}
+.pq-grid{display:flex;max-width:960px;margin:0 auto 44px;border-top:1px solid #e8e8e8;border-bottom:1px solid #e8e8e8}
+.pq-item{flex:1;padding:40px 20px;border-right:1px solid #e8e8e8;display:flex;flex-direction:column;align-items:center;gap:10px;transition:background .25s;cursor:default}
+.pq-item:last-child{border-right:none}
+.pq-item:hover{background:#f5f5f5}
+.pq-num{font-size:44px;font-weight:800;letter-spacing:-2px;line-height:1;color:#111}
+.pq-title{font-size:13px;font-weight:600;color:#333;line-height:1.5;max-width:170px}
+.pq-prog-wrap{max-width:480px;margin:0 auto}
+.pq-prog-track{width:100%;height:2px;background:#e8e8e8;border-radius:4px;overflow:hidden;margin-bottom:10px}
+.pq-prog-fill{height:100%;width:16.5%;background:#111;border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+.pq-prog-dots{display:flex;justify-content:space-between}
+.pq-dot{width:8px;height:8px;border-radius:50%;background:#ccc;transition:background .4s,transform .3s;display:inline-block}
+.pq-dot.on{background:#111;transform:scale(1.4)}
+@media(max-width:768px){
+  .pq-section{padding:50px 20px 40px}
+  .pq-grid{flex-direction:column}
+  .pq-item{border-right:none;border-bottom:1px solid #e8e8e8}
+  .pq-item:last-child{border-bottom:none}
+}

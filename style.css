@@ -50,7 +50,7 @@ nav.scrolled .nav-logo img { height: 42px; }
   font-weight: 500;
   letter-spacing: 1px;
   text-transform: uppercase;
-  background: rgba(255,255,255,0.08);
+  background: rgba(0, 0, 0, 0.55); /* ← fond sombre garanti */
   transition: background .2s, color .2s;
 }
 .nav-book:hover { background: #fff; color: #000; }

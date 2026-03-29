@@ -125,9 +125,7 @@ section{padding:80px 48px}
 .about p{color:rgba(255,255,255,.62);max-width:62ch;margin:0 auto;line-height:1.8;font-size:16px}
 
 /* SERVICES */
-.services,
-.resa-cards            { background: #0a0a0a; }
-.services-grid         { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.services { background: #0a0a0a; }
 
 .service-card {
   background: #1a1a1a;
@@ -225,7 +223,17 @@ textarea{min-height:120px;resize:vertical}
 .contact-info p{color:rgba(255,255,255,.5);font-size:15px;line-height:1.8;margin-bottom:12px}
 
 /* RESERVATION PAGE */
-/* RESERVATION PAGE */
+/* Bouton RÉSERVER visible sur fond blanc */
+.resa-grid .btn-book {
+  border-color: #111;
+  color: #111;
+  background: transparent;
+}
+.resa-grid .btn-book:hover {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
 .resa-hero {
   min-height: 65vh;
   background: #111 url('img/hero2.jpg') center/cover no-repeat;

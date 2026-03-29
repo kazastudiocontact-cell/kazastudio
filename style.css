@@ -230,17 +230,9 @@ textarea{min-height:120px;resize:vertical}
 .contact-info p{color:rgba(255,255,255,.5);font-size:15px;line-height:1.8;margin-bottom:12px}
 
 /* RESERVATION PAGE */
-/* Bouton RÉSERVER visible sur fond blanc */
-.resa-grid .btn-book {
-  border-color: #111;
-  color: #111;
-  background: transparent;
-}
-.resa-grid .btn-book:hover {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-}
+.resa-grid .btn-book { border-color: #111; color: #111; background: transparent; }
+.resa-grid .btn-book:hover { background: #111; color: #fff; border-color: #111; }
+
 .resa-hero {
   min-height: 65vh;
   background: #111 url('img/hero2.jpg') center/cover no-repeat;
@@ -249,13 +241,36 @@ textarea{min-height:120px;resize:vertical}
   text-align: center; position: relative;
   padding: 120px 48px 60px;
 }
-.resa-hero::before {
-  content: ''; position: absolute; inset: 0;
-  background: rgba(0,0,0,.5);
-}
+.resa-hero::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,.5); }
 .resa-hero * { position: relative; z-index: 1; }
 .resa-hero h1 { font-size: clamp(30px,6vw,70px); font-weight: 700; margin-bottom: 16px; }
 .resa-hero p  { font-size: 16px; opacity: .6; max-width: 58ch; margin: 0 auto; }
+
+/* ─── Exception nav : page réservation ─── */
+.page-reservation .nav-book {
+  border-color: rgba(0, 0, 0, 0.18);
+  color: rgba(0, 0, 0, 0.75);
+  background: rgba(210, 210, 210, 0.65);
+}
+.page-reservation .nav-book:hover {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #000;
+}
+
+/* ─── Exception : page réservation (fond gris clair) ─── */
+.page-reservation .nav-book {
+  border-color: rgba(0, 0, 0, 0.18);
+  color: rgba(0, 0, 0, 0.75);
+  background: rgba(210, 210, 210, 0.65);
+}
+.page-reservation .nav-book:hover {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #000;
+}
 
 /* ↓ CHANGEMENTS GLASS */
 .resa-cards {

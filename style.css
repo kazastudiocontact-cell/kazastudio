@@ -11,30 +11,59 @@ body{
 }
 
 /* NAV */
-nav{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 48px;
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  background:rgba(0,0,0,0.72);
-  backdrop-filter:blur(12px);
-  transition:padding .3s,background .3s;
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 28px;
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
+  max-width: 1300px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 50px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  transition: padding .3s, background .3s;
 }
-nav.scrolled{
-  padding:10px 48px;
-  background:rgba(0,0,0,0.92);
+nav.scrolled {
+  padding: 10px 28px;
+  background: rgba(10, 10, 10, 0.55);
 }
-.nav-logo img{height:52px;width:auto;transition:height .3s}
-nav.scrolled .nav-logo img{height:42px}
-.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
-.nav-links a{color:#fff;text-decoration:none;font-size:14px;font-weight:400;letter-spacing:.5px;transition:opacity .2s}
-.nav-links a:hover{opacity:.55}
-.nav-book{
-  border:1px solid #fff;padding:10px 26px;border-radius:50px;
-  color:#fff;text-decoration:none;font-size:13px;font-weight:500;
-  letter-spacing:1px;text-transform:uppercase;
-  transition:background .2s,color .2s;
+.nav-logo img { height: 52px; width: auto; transition: height .3s; }
+nav.scrolled .nav-logo img { height: 42px; }
+.nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+.nav-links a { color: #fff; text-decoration: none; font-size: 14px; font-weight: 400; letter-spacing: .5px; transition: opacity .2s; }
+.nav-links a:hover { opacity: .55; }
+.nav-book {
+  border: 1px solid rgba(255,255,255,0.6);
+  padding: 10px 26px;
+  border-radius: 50px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.08);
+  transition: background .2s, color .2s;
 }
-.nav-book:hover{background:#fff;color:#000}
+.nav-book:hover { background: #fff; color: #000; }
+
+@media(max-width:900px) {
+  nav {
+    top: 10px;
+    width: calc(100% - 24px);
+    padding: 10px 16px;
+    border-radius: 30px;
+  }
+  .nav-links { display: none; }
+}
 
 /* SCROLL ANIMATIONS */
 .reveal{
@@ -193,8 +222,6 @@ textarea{min-height:120px;resize:vertical}
 .resa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
 
 @media(max-width:900px){
-  nav{padding:12px 20px}
-  nav.scrolled{padding:8px 20px}
   section,footer,.contact-hero,.contact-form-section,.resa-hero,.resa-cards,.about{padding-left:20px;padding-right:20px}
   .services-grid,.resa-grid{grid-template-columns:1fr}
   .gallery{grid-template-columns:1fr 1fr}

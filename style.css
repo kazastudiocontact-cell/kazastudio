@@ -243,30 +243,74 @@ textarea{min-height:120px;resize:vertical}
 .contact-info p{color:rgba(255,255,255,.5);font-size:15px;line-height:1.8;margin-bottom:12px}
 
 /* RESERVATION PAGE */
-.resa-hero{
-  min-height:65vh;
-  background:#111 url('img/hero2.jpg') center/cover no-repeat;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;position:relative;padding:120px 48px 60px;
+/* RESERVATION PAGE */
+.resa-hero {
+  min-height: 65vh;
+  background: #111 url('img/hero2.jpg') center/cover no-repeat;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; position: relative;
+  padding: 120px 48px 60px;
 }
-.resa-hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
-.resa-hero *{position:relative;z-index:1}
-.resa-hero h1{font-size:clamp(30px,6vw,70px);font-weight:700;margin-bottom:16px}
-.resa-hero p{font-size:16px;opacity:.6;max-width:58ch;margin:0 auto}
-
-.resa-cards{background:#f0f0f0;padding:80px 48px}
-.resa-cards .section-title{color:#000}
-.resa-cards .section-sub{color:#666}
-.resa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-
-@media(max-width:900px){
-  section,footer,.contact-hero,.contact-form-section,.resa-hero,.resa-cards,.about{padding-left:20px;padding-right:20px}
-  .services-grid,.resa-grid{grid-template-columns:1fr}
-  .gallery{grid-template-columns:1fr 1fr}
-  .contact-form-section{grid-template-columns:1fr;gap:40px}
-  .form-row{grid-template-columns:1fr}
-  .nav-links{display:none}
+.resa-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(0,0,0,.5);
 }
+.resa-hero * { position: relative; z-index: 1; }
+.resa-hero h1 { font-size: clamp(30px,6vw,70px); font-weight: 700; margin-bottom: 16px; }
+.resa-hero p  { font-size: 16px; opacity: .6; max-width: 58ch; margin: 0 auto; }
+
+/* ↓ CHANGEMENTS GLASS */
+.resa-cards {
+  background: #0a0a0a;      /* ← was #f0f0f0 */
+  padding: 80px 48px;
+}
+.resa-cards .section-title { color: #fff; }       /* ← was #000 */
+.resa-cards .section-sub   { color: rgba(255,255,255,.45); } /* ← was #666 */
+
+.resa-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+
+/* Cartes glass — même style que .service-card */
+.resa-grid > * {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform .3s ease, box-shadow .3s ease, background .3s ease;
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+}
+.resa-grid > *:hover {
+  transform: translateY(-6px);
+  background: rgba(255,255,255,0.10);
+  box-shadow: 0 16px 48px rgba(0,0,0,.45);
+}
+.resa-grid > * .card-img          { height: 240px; overflow: hidden; }
+.resa-grid > * .card-img img      { width:100%; height:100%; object-fit:cover; transition: transform .5s; }
+.resa-grid > *:hover .card-img img{ transform: scale(1.05); }
+.resa-grid > * .card-body         { padding: 28px 24px; flex:1; display:flex; flex-direction:column; }
+.resa-grid > * h3                 { font-size:19px; font-weight:700; color:#fff; margin-bottom:8px; }
+.resa-grid > * p                  { font-size:13px; color:rgba(255,255,255,.55); line-height:1.6; flex:1; margin-bottom:24px; }
+
+/* Bouton RÉSERVER dans les cartes resa */
+.resa-grid .btn-book,
+.resa-grid a[class*="btn"],
+.resa-grid button {
+  display: block; text-align: center;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 50px;
+  padding: 13px 24px; color: #fff;
+  text-decoration: none; font-size: 12px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  font-weight: 500; background: rgba(255,255,255,0.05);
+  transition: background .2s, color .2s, border-color .2s;
+  cursor: pointer;
+}
+.resa-grid .btn-book:hover,
+.resa-grid a[class*="btn"]:hover,
+.resa-grid button:hover { background:#fff; color:#000; border-color:#fff; }
 
 /* ── POURQUOI SECTION ── */
 .pq-section{background:#ffffff;padding:80px 60px 60px;text-align:center}

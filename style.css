@@ -63,6 +63,12 @@ nav.scrolled .nav-logo img { height: 42px; }
     border-radius: 30px;
   }
   .nav-links { display: none; }
+  section, footer, .contact-hero, .contact-form-section,
+  .resa-hero, .resa-cards, .about { padding-left: 20px; padding-right: 20px; }
+  .services-grid, .resa-grid   { grid-template-columns: 1fr; } /* ← AJOUTE ÇA */
+  .gallery                     { grid-template-columns: 1fr 1fr; }
+  .contact-form-section        { grid-template-columns: 1fr; gap: 40px; }
+  .form-row                    { grid-template-columns: 1fr; }
 }
 
 /* SCROLL ANIMATIONS */
@@ -125,7 +131,8 @@ section{padding:80px 48px}
 .about p{color:rgba(255,255,255,.62);max-width:62ch;margin:0 auto;line-height:1.8;font-size:16px}
 
 /* SERVICES */
-.services { background: #0a0a0a; }
+.services           { background: #0a0a0a; }
+.services-grid      { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; } /* ← MANQUAIT */
 
 .service-card {
   background: #1a1a1a;

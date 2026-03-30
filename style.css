@@ -299,23 +299,26 @@ textarea{min-height:120px;resize:vertical}
 .resa-grid > * h3                 { font-size:19px; font-weight:700; color:#fff; margin-bottom:8px; }
 .resa-grid > * p                  { font-size:13px; color:rgba(255,255,255,.55); line-height:1.6; flex:1; margin-bottom:24px; }
 
-/* Bouton RÉSERVER dans les cartes resa */
+/* Bouton Réserver dans les cartes resa — visible sur fond blanc */
 .resa-grid .btn-book,
 .resa-grid a[class*="btn"],
 .resa-grid button {
-  display: block; text-align: center;
-  border: 1px solid rgba(255,255,255,0.4);
+  border: 1px solid rgba(0, 0, 0, 0.25);
   border-radius: 50px;
-  padding: 13px 24px; color: #fff;
-  text-decoration: none; font-size: 12px;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  font-weight: 500; background: rgba(255,255,255,0.05);
+  padding: 13px 24px;
+  color: #111;
+  background: rgba(30, 30, 30, 0.10);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: background .2s, color .2s, border-color .2s;
-  cursor: pointer;
 }
 .resa-grid .btn-book:hover,
 .resa-grid a[class*="btn"]:hover,
-.resa-grid button:hover { background:#fff; color:#000; border-color:#fff; }
+.resa-grid button:hover {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
 
 /* ── POURQUOI SECTION ── */
 .pq-section{background:#ffffff;padding:80px 60px 60px;text-align:center}

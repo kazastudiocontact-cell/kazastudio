@@ -63,21 +63,15 @@ nav.scrolled .nav-logo img { height: 42px; }
 }
 
 @media(max-width:900px) {
-  nav {
-    top: 10px;
-    width: calc(100% - 24px);
-    padding: 10px 16px;
-    border-radius: 30px;
-  }
-  .nav-links { display: none; }
-  section, footer, .contact-hero, .contact-form-section,
-  .resa-hero, .resa-cards, .about { padding-left: 20px; padding-right: 20px; }
-  .services-grid, .resa-grid   { grid-template-columns: 1fr; } /* ← AJOUTE ÇA */
-  .gallery                     { grid-template-columns: 1fr 1fr; }
-  .contact-form-section        { grid-template-columns: 1fr; gap: 40px; }
-  .form-row                    { grid-template-columns: 1fr; }
+  nav { top:10px; width:calc(100% - 24px); padding:10px 16px; border-radius:30px; }
+  .nav-links { display:none; }
+  .services           { padding: 60px 20px; }      
+  .services-grid      { grid-template-columns: 1fr; } 
+  .gallery            { grid-template-columns: 1fr 1fr; }
+  .resa-grid          { grid-template-columns: 1fr; }
+  .contact-form-section { grid-template-columns: 1fr; gap: 40px; }
+  .form-row           { grid-template-columns: 1fr; }
 }
-
 /* SCROLL ANIMATIONS */
 .reveal{
   opacity:0;transform:translateY(40px);
@@ -138,8 +132,13 @@ section{padding:80px 48px}
 .about p{color:rgba(255,255,255,.62);max-width:62ch;margin:0 auto;line-height:1.8;font-size:16px}
 
 /* SERVICES */
-.services           { background: #0a0a0a; }
-.services-grid      { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; } /* ← MANQUAIT */
+.services { background: #0a0a0a; padding: 80px 48px; }
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
 
 .service-card {
   background: #1a1a1a;
@@ -254,19 +253,6 @@ textarea{min-height:120px;resize:vertical}
 .resa-hero p  { font-size: 16px; opacity: .6; max-width: 58ch; margin: 0 auto; }
 
 /* ─── Exception nav : page réservation ─── */
-.page-reservation .nav-book {
-  border-color: rgba(0, 0, 0, 0.18);
-  color: rgba(0, 0, 0, 0.75);
-  background: rgba(210, 210, 210, 0.65);
-}
-.page-reservation .nav-book:hover {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  color: #000;
-}
-
-/* ─── Exception : page réservation (fond gris clair) ─── */
 .page-reservation .nav-book {
   border-color: rgba(0, 0, 0, 0.18);
   color: rgba(0, 0, 0, 0.75);

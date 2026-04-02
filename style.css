@@ -62,16 +62,6 @@ nav.scrolled .nav-logo img { height: 42px; }
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
-@media(max-width:900px) {
-  nav { top:10px; width:calc(100% - 24px); padding:10px 16px; border-radius:30px; }
-  .nav-links { display:none; }
-  .services           { padding: 60px 20px; }      
-  .services-grid      { grid-template-columns: 1fr; } 
-  .gallery            { grid-template-columns: 1fr 1fr; }
-  .resa-grid          { grid-template-columns: 1fr; }
-  .contact-form-section { grid-template-columns: 1fr; gap: 40px; }
-  .form-row           { grid-template-columns: 1fr; }
-}
 /* SCROLL ANIMATIONS */
 .reveal{
   opacity:0;transform:translateY(40px);
@@ -340,4 +330,22 @@ textarea{min-height:120px;resize:vertical}
   .pq-grid{flex-direction:column}
   .pq-item{border-right:none;border-bottom:1px solid #e8e8e8}
   .pq-item:last-child{border-bottom:none}
+}
+@media(max-width: 900px) {
+  nav {
+    top: 10px;
+    width: calc(100% - 24px);
+    padding: 10px 16px;
+    border-radius: 30px;
+  }
+  .nav-links            { display: none; }
+  .services             { padding: 60px 20px; }
+  .services-grid        { grid-template-columns: 1fr !important; }
+  .resa-cards           { padding: 60px 20px; }
+  .resa-grid            { grid-template-columns: 1fr !important; }
+  .gallery              { grid-template-columns: 1fr 1fr; }
+  .about                { padding: 60px 20px; }
+  .contact-form-section { grid-template-columns: 1fr; gap: 40px; }
+  .form-row             { grid-template-columns: 1fr; }
+  section               { padding: 60px 20px; }
 }
